@@ -401,7 +401,8 @@ _kv_set() {
 # Back up a file or directory before overwriting it
 _backup() {
   local FILE="$1"
-  local BAK="${FILE}.teneo-bak.$(date +%Y%m%d-%H%M%S)"
+  local BAK
+  BAK="${FILE}.teneo-bak.$(date +%Y%m%d-%H%M%S)"
   if [[ -f "$FILE" ]]; then
     run_sudo cp -p "$FILE" "$BAK" 2>/dev/null && info "Backed up: $(basename "$FILE") → $(basename "$BAK")" || true
   elif [[ -d "$FILE" ]]; then
@@ -683,7 +684,8 @@ cmd_harden() {
   fi
   info "Configuring UFW firewall…"
   # Preserve any pre-existing rules before reset — user may have custom port allows
-  local UFW_BAK="/etc/ufw/teneo-rules-bak.$(date +%Y%m%d-%H%M%S).txt"
+  local UFW_BAK
+  UFW_BAK="/etc/ufw/teneo-rules-bak.$(date +%Y%m%d-%H%M%S).txt"
   if run_sudo ufw status numbered 2>/dev/null | grep -q "^\["; then
     warn "Existing UFW rules will be replaced. Saving backup to ${UFW_BAK}"
     run_sudo ufw status verbose 2>/dev/null | run_sudo tee "$UFW_BAK" > /dev/null || true
