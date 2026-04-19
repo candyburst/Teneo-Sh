@@ -1,0 +1,27 @@
+name: ShellCheck
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  shellcheck:
+    name: Lint shell scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: "."
+          severity: warning
+        env:
+          SHELLCHECK_OPTS: >-
+            --shell=bash
+            --external-sources
+            --exclude=SC2034
